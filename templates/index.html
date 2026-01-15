@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Voucher Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header-box">
+            <div class="header-left">Welcome to Dubai</div>
+            <div class="header-center">Travel Itinerary</div>
+            <div class="header-right">
+                <img src="{{ url_for('static', filename='triplogo.png') }}" alt="Logo" class="header-logo">
+                <div>The itinerary must be carried by guest all the time along with a visa copy</div>
+            </div>
+        </div>
+
+        <h1>Booking Confirmation Voucher</h1>
+
+        <form method="POST" action="/generate">
+
+            <!-- Trip Voucher -->
+            <div class="section-box">
+                <h2 class="section-heading">Trip Voucher</h2>
+                <input type="text" name="trip_id" placeholder="1. Trip ID" required>
+                <input type="date" name="arrival_date" placeholder="2. Arrival Date" required>
+                <input type="text" name="departure" placeholder="3. Departure  " required>
+                <input type="text" name="duration" placeholder="4. Trip Duration" required>
+                <input type="text" name="guest_name" placeholder="5. Guest Name" required>
+                <input type="text" name="guest_phone" placeholder="6. Guest Phone" required>
+                <input type="text" name="pax" placeholder="7. Pax" required>
+                <input type="text" name="reference_id" placeholder="8. Reference ID" required>
+
+            </div>
+
+            <!-- Hotels -->
+            <div class="section-box">
+                <h2 class="section-heading">Hotels</h2>
+                <div id="hotels">
+                    <div class="hotel-row">
+                        <input type="text" name="hotel_name[]" placeholder="Hotel Name" required>
+                        <input type="date" name="check_in[]" placeholder="Check-In" required>
+                        <input type="date" name="check_out[]" placeholder="Check-Out" required>
+                        <textarea name="accommodation[]" placeholder="Accommodation"></textarea>
+                    </div>
+                </div>
+                <button type="button" onclick="addHotel()">Add Hotel</button>
+            </div>
+
+            <!-- Activities -->
+            <div class="section-box">
+                <h2 class="section-heading">Activities</h2>
+                <div id="activities">
+                    <div class="activity-row">
+                        <input type="text" name="day[]" placeholder="Day" required>
+                        <input type="text" name="start_time[]" placeholder="Start Time" required>
+                        <select name="service[]" required>
+                            <option value="">-- Select Activity / Attraction --</option>
+                            <option>The Burj Khalifa</option>
+                            <option>Dubai Aquarium & Underwater Zoo with Penguin Cove</option>
+                            <option>The View at the Palm</option>
+                            <option>Dubai Frame</option>
+                            <option>Palm Monorail</option>
+                            <option>Ain Dubai</option>
+                            <option>Global Village</option>
+                            <option>Miracle Garden</option>
+                            <option>AYA Universe</option>
+                            <option>IMG Worlds of Adventure</option>
+                            <option>Dolphin Show</option>
+                            <option>Dubai Parks & Resorts – Motiongate</option>
+                            <option>Dubai Parks & Resorts – Legoland</option>
+                            <option>Dubai Parks & Resorts – Legoland Water Park</option>
+                            <option>Dubai Parks & Resorts – Real Madrid World</option>
+                            <option>Ski Dubai – Snow Park</option>
+                            <option>Ski Dubai – Classic</option>
+                            <option>Ski Dubai – Plus</option>
+                            <option>Sky Views Observatory with Glass Slide</option>
+                            <option>Dubai Safari Park</option>
+                            <option>TeamLab Phenomena Abu Dhabi</option>
+                            <option>Qasr Al Watan Palace – Abu Dhabi</option>
+                            <option>Ferrari World Abu Dhabi</option>
+                            <option>Warner Bros. World Abu Dhabi</option>
+                            <option>Yas Waterworld Abu Dhabi</option>
+                            <option>SeaWorld Abu Dhabi</option>
+                            <option>Emirates Park Zoo</option>
+                            <option>Louvre Abu Dhabi</option>
+                            <option>The National Aquarium Abu Dhabi</option>
+                        </select>
+                        <input type="text" name="pax_or_vehicle[]" placeholder="Pax / Vehicle Info">
+                        <input type="text" name="remarks[]" placeholder="Remarks">
+                    </div>
+                </div>
+                <button type="button" onclick="addActivity()">Add Another Time / Service</button>
+            </div>
+
+            <!-- Inclusions & Exclusions -->
+            <div class="section-box">
+                <h2 class="section-heading">Inclusions & Exclusions</h2>
+                <div class="two-column-box">
+                    <div>
+                        <strong>Inclusions:</strong>
+                        <ul>
+                            <li>Inclusions as per itinerary</li>
+                            <li> Breakfast and Dinner</li>
+                            <li> Visa </li>
+                            <li> Dubai Hotel and Tourism Dirham Fees</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Exclusions:</strong>
+                        <ul>
+                            <li> Arrival Day Breakfast</li>
+                            <li> Departure day dinner </li>
+                            <li> Meal other than mention</li>
+                            <li> Note : Anything not in inclusions is excluded</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Helpline -->
+            <div class="section-box">
+                <h2 class="section-heading">Helpline</h2>
+                <div class="helpline-box">
+                    <div>Contact Person: TravelMate Pvt Ltd</div>
+                    <div>Status: 24x7 Operational</div>
+                    <div>Phone: +97 155 4739783</div>
+                </div>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="section-box">
+                <h2 class="section-heading">Terms & Conditions</h2>
+                <ol>
+                    <li>Cancellation charges apply as per policy.</li>
+                     <li>Trip itinerary may change due to weather.</li>
+                    <li>Company is not responsible for lost belongings.</li>
+                    <li>Late arrivals may miss scheduled activities.</li>
+                    <li>Extra services are charged separately.</li>
+                      <li>Meals are included unless otherwise stated.</li>
+                     <li>Guests must follow safety guidelines.</li>
+                    <li>Complaints should be reported immediately.</li>
+                    <li>Company reserves the right to amend terms.</li>
+                </ol>
+            </div>
+
+            <!-- Address -->
+            <div class="address-container">
+                <label>
+                    Address: P.O Box: 46331, Bur Dubai Dubai. U.A.E | Tel: +9714 3554935 | Fax: +971 4 3554935 | Email:
+                    info@overnetdubai.com
+                </label>
+            </div>
+            <div class="site-container">
+                <label>www.overnetdubai.com</label>
+            </div>
+
+            <button type="submit">Generate PDF</button>
+        </form>
+    </div>
+
+    <script>
+        function addHotel() {
+            let container = document.getElementById('hotels');
+            let row = document.createElement('div');
+            row.classList.add('hotel-row');
+            row.innerHTML = `
+        <input type="text" name="hotel_name[]" placeholder="Hotel Name" required>
+        <input type="date" name="check_in[]" placeholder="Check-In" required>
+        <input type="date" name="check_out[]" placeholder="Check-Out" required>
+        <textarea name="accommodation[]" placeholder="Accommodation"></textarea>`;
+            container.appendChild(row);
+        }
+
+        function addActivity() {
+            let container = document.getElementById('activities');
+            let row = document.createElement('div');
+            row.classList.add('activity-row');
+            row.innerHTML = `
+        <input type="text" name="day[]" placeholder="Day" required>
+        <input type="text" name="start_time[]" placeholder="Start Time" required>
+        <select name="service[]" required>
+            <option value="">-- Select Activity / Attraction --</option>
+            <option>The Burj Khalifa</option>
+            <option>Dubai Aquarium & Underwater Zoo with Penguin Cove</option>
+            <option>The View at the Palm</option>
+            <option>Dubai Frame</option>
+            <option>Palm Monorail</option>
+            <option>Ain Dubai</option>
+            <option>Global Village</option>
+            <option>Miracle Garden</option>
+            <option>AYA Universe</option>
+            <option>IMG Worlds of Adventure</option>
+            <option>Dolphin Show</option>
+            <option>Dubai Parks & Resorts – Motiongate</option>
+            <option>Dubai Parks & Resorts – Legoland</option>
+            <option>Dubai Parks & Resorts – Legoland Water Park</option>
+            <option>Dubai Parks & Resorts – Real Madrid World</option>
+            <option>Ski Dubai – Snow Park</option>
+            <option>Ski Dubai – Classic</option>
+            <option>Ski Dubai – Plus</option>
+            <option>Sky Views Observatory with Glass Slide</option>
+            <option>Dubai Safari Park</option>
+            <option>TeamLab Phenomena Abu Dhabi</option>
+            <option>Qasr Al Watan Palace – Abu Dhabi</option>
+            <option>Ferrari World Abu Dhabi</option>
+            <option>Warner Bros. World Abu Dhabi</option>
+            <option>Yas Waterworld Abu Dhabi</option>
+            <option>SeaWorld Abu Dhabi</option>
+            <option>Emirates Park Zoo</option>
+            <option>Louvre Abu Dhabi</option>
+            <option>The National Aquarium Abu Dhabi</option>
+        </select>
+        <input type="text" name="pax_or_vehicle[]" placeholder="Pax / Vehicle Info">
+        <input type="text" name="remarks[]" placeholder="Remarks">`;
+            container.appendChild(row);
+        }
+    </script>
+</body>
+
+</html>

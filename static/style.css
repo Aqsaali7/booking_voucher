@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #cccccc;
+}
+
+h1 {
+    text-align: center;
+    color: #0072BC;
+}
+
+/* Section boxes */
+.section-box {
+    border: 1px solid #cccccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+}
+
+/* Section headings - blue and centered */
+.section-heading {
+    text-align: center;
+    color: #023150;
+    background-color: #b9d7f0;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Header with logo */
+.header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #e6f0f8;
+}
+
+.header-left, .header-center, .header-right {
+    flex: 1;
+    text-align: center;
+}
+
+.header-left { text-align: left; font-weight: bold; }
+.header-center { text-align: center; font-size: 30px; font-weight: bold; color: #0072BC; }
+.header-right { text-align: right; font-size: 15px; font-weight: bold;    }
+.header-logo {
+    max-height: 70px;
+    margin-top: 10px;
+}
+
+/* Inputs and buttons */
+input, textarea {
+    display: block;
+    width: 95%;
+    margin-bottom: 10px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button {
+    padding: 6px 12px;
+    background-color: #0072BC;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005a99;
+}
+
+/* 2-column box */
+.two-column-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.two-column-box > div {
+    width: 48%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Helpline box */
+.helpline-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.address-container,
+.site-container {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.address-container label {
+    display: block;
+    color: rgba(5, 5, 155, 0.493);
+}
+
+.site-container label {
+    display: block;
+    color: rgba(21, 21, 141, 0.664);
+}
+
