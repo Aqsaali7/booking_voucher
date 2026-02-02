@@ -3,13 +3,13 @@ from typing import List
 
 @dataclass
 class TripVoucher:
+    guest_name: str
     trip_id: str
     Arrival_date: str
     Departure: str
-    duration: str
-    guest_name: str
-    guest_phone: str
     pax: str
+    duration: str
+    guest_phone: str
     reference_id: str
 
 @dataclass

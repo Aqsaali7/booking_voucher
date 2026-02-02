@@ -12,7 +12,8 @@ import os
 app = Flask(__name__)
 
 # ---------------- CONSTANT DATA ----------------
-LOGO_PATH = "static/triplogo.png"
+LOGO_PATH = "static/Untitles-1.png"
+DUBAI_LOGO_PATH = "static/dubai_no_bg.png"
 
 HELPLINE = [["24x7 Operational", "HIREN PAREKH", "+97 155 4739783"]]
 
@@ -42,8 +43,8 @@ TERMS = [
 
 ADDRESS = (
     "P.O Box: 46331, Bur Dubai Dubai. U.A.E | "
-    "Tel: +9714 3554935 | Fax: +971 4 3554935 | "
-    "Email: info@overnetdubai.com<br/>www.overnetdubai.com"
+    "Tel: +97 155 4739783 | Fax: 04-5752879 | "
+    "Email: info@triplegend.com<br/>www.triplegend.com"
 )
 
 # ---------------- COLORS ----------------
@@ -61,10 +62,22 @@ def draw_first_page_header(canvas, doc):
     canvas.setFillColor(LIGHT_BLUE)
     canvas.rect(0, h - 120, w, 120, fill=1, stroke=0)
 
-    # LEFT TEXT (Welcome to Dubai)
+    # LEFT LOGO (Dubai logo above text)
+    if os.path.exists(DUBAI_LOGO_PATH):
+        canvas.drawImage(
+            DUBAI_LOGO_PATH,
+            30,
+            h - 90,
+            60,
+            50,
+            preserveAspectRatio=True,
+            mask="auto"
+        )
+
+    # LEFT TEXT (Welcome to Dubai under logo)
     canvas.setFont("Helvetica-Bold", 11)
     canvas.setFillColor(DARK_BLUE)
-    canvas.drawString(30, h - 55, "Welcome to Dubai")
+    canvas.drawString(30, h - 105, "Welcome to Dubai")
 
     # CENTER TITLE
     canvas.setFont("Helvetica-Bold", 22)
@@ -114,7 +127,7 @@ heading_style = ParagraphStyle(
     borderWidth=1,
     spaceBefore=12,
     spaceAfter=6,
-    padding=6
+    padding=8
 )
 
 text_style = ParagraphStyle(
@@ -124,6 +137,8 @@ text_style = ParagraphStyle(
     alignment=TA_LEFT,
     wordWrap="CJK"
 )
+
+normal_style = styles["Normal"]
 
 address_style = ParagraphStyle(
     "address",
@@ -136,6 +151,7 @@ address_style = ParagraphStyle(
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/generate", methods=["POST"])
 def generate_pdf():
@@ -156,40 +172,60 @@ def generate_pdf():
     elements.append(Paragraph("Trip Voucher", heading_style))
 
     trip_table = Table([
-        ["1. Trip ID", request.form.get("trip_id", "")],
-        ["2. Arrival Date", request.form.get("arrival_date", "")],
-        ["3. Departure", request.form.get("departure", "")],
-        ["4. Duration", request.form.get("duration", "")],
-        ["5. Guest Name", request.form.get("guest_name", "")],
-        ["6. Phone", request.form.get("guest_phone", "")],
-        ["7. Pax", request.form.get("pax", "")],
-        ["8. Reference ID", request.form.get("reference_id", "")],
-    ], colWidths=[150, 300])
+        ["1. Guest Name", request.form.get("guest_name", ""),
+         "2. Trip ID", request.form.get("trip_id", "")],
+
+        ["3. Arrival Date", request.form.get("arrival_date", ""),
+         "4. Departure", request.form.get("departure", "")],
+
+        ["5. Pax", request.form.get("pax", ""),
+         "6. Duration", request.form.get("duration", "")],
+
+        ["7. Phone", request.form.get("guest_phone", ""),
+         "8. Reference ID", request.form.get("reference_id", "")],
+    ], colWidths=[130, 170, 130, 170])
 
     trip_table.setStyle(TableStyle([
         ("GRID", (0, 0), (-1, -1), 0.5, GREY),
-        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold")
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("FONTNAME", (2, 0), (2, -1), "Helvetica-Bold"),
+        ("ALIGN", (1, 0), (-1, -1), "LEFT"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
     ]))
     elements.append(trip_table)
 
     # ---------------- HOTELS ----------------
     elements.append(Paragraph("Hotels", heading_style))
-    hotel_data = [["Hotel", "Check-In", "Check-Out", "Room Type"]]
 
-    for h, ci, co, acc in zip(
+    hotel_data = []
+
+    for i, (h, ci, co, acc) in enumerate(zip(
         request.form.getlist("hotel_name[]"),
         request.form.getlist("check_in[]"),
         request.form.getlist("check_out[]"),
         request.form.getlist("accommodation[]")
-    ):
-        hotel_data.append([h, ci, co, acc])
+    ), start=1):
+        hotel_data.extend([
+            [f"Hotel {i}", Paragraph(h, normal_style)],
+            ["Check-In", ci],
+            ["Check-Out", co],
+            ["Accommodation", Paragraph(acc, normal_style)],
+            ["", ""],  # spacing row
+        ])
 
-    hotel_table = Table(hotel_data, colWidths=[160, 90, 90, 110])
+    hotel_table = Table(hotel_data, colWidths=[150, 250])
     hotel_table.setStyle(TableStyle([
         ("GRID", (0, 0), (-1, -1), 0.5, GREY),
-        ("BACKGROUND", (0, 0), (-1, 0), LIGHT_BLUE),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold")
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
     ]))
+
     elements.append(hotel_table)
 
     # ---------------- ACTIVITIES ----------------
@@ -220,21 +256,43 @@ def generate_pdf():
     ]))
     elements.append(activity_table)
 
-    # ---------------- INCLUSIONS ----------------
-    elements.append(Paragraph("Inclusions", heading_style))
-    elements.append(Table(
-        [[f"✓ {i}"] for i in INCLUSIONS],
-        colWidths=[450],
-        style=[("GRID", (0, 0), (-1, -1), 0.5, GREY)]
-    ))
+    # ---------------- INCLUSIONS & EXCLUSIONS ----------------
+    # Get dynamic points from the form (all user-added inputs)
+    inclusions_list = [i.strip() for i in request.form.getlist("inclusions[]") if i.strip()]
+    exclusions_list = [e.strip() for e in request.form.getlist("exclusions[]") if e.strip()]
 
-    # ---------------- EXCLUSIONS ----------------
-    elements.append(Paragraph("Exclusions", heading_style))
-    elements.append(Table(
-        [[f"• {e}"] for e in EXCLUSIONS],
-        colWidths=[450],
-        style=[("GRID", (0, 0), (-1, -1), 0.5, GREY)]
-    ))
+    # Determine max number of rows needed
+    max_rows = max(len(inclusions_list), len(exclusions_list))
+
+    # Fill shorter list with empty strings so both columns align
+    while len(inclusions_list) < max_rows:
+        inclusions_list.append("")
+    while len(exclusions_list) < max_rows:
+        exclusions_list.append("")
+
+    # Build table data row by row
+    two_column_data = []
+    for i in range(max_rows):
+        two_column_data.append([
+            f"✓ {inclusions_list[i]}" if inclusions_list[i] else "",
+            f"• {exclusions_list[i]}" if exclusions_list[i] else ""
+        ])
+
+    # Add heading before table
+    elements.append(Paragraph("Inclusions & Exclusions", heading_style))
+
+    # Create PDF table side by side
+    two_column_table = Table(two_column_data, colWidths=[225, 225])
+    two_column_table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, GREY),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+
+    elements.append(two_column_table)
 
     # ---------------- TERMS & CONDITIONS ----------------
     elements.append(Paragraph("Terms & Conditions", heading_style))
@@ -263,8 +321,6 @@ def generate_pdf():
     buffer.seek(0)
     return send_file(buffer, as_attachment=True, download_name="TravelVoucher.pdf")
 
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
